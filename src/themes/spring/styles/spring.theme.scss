@@ -1,0 +1,262 @@
+@import 'bootstrap/scss/bootstrap';
+
+$brandPrimaryColor: #ffffff;
+$brandSecondaryColor: #cccccc;
+$backgroundDefaultColor: #ffffff;
+$textDefaultColor: #333333;
+$bodyFont: Arial;
+$displayFont: Impact;
+$borderRadius: 4;
+$iconStyle: Line;
+$categoryColor: #000;
+$expandedCategoryColor: #000;
+
+:root {
+    --brandPrimaryColor: #{brandPrimaryColor};
+    --brandSecondaryColor: #{brandSecondaryColor};
+    --backgroundDefaultColor: #{$backgroundDefaultColor};
+    --textDefaultColor: #{textDefaultColor};
+    --bodyFont: #{bodyFont};
+    --displayFont: #{displayFont};
+    --borderRadius: #{borderRadius};
+    --iconStyle: #{iconStyle};
+    --categoryColor: #{categoryColor};
+    --expandedCategoryColor: #{expandedCategoryColor};
+}
+
+body {
+    background-color: var(--backgroundDefaultColor);
+}
+
+
+.cursor-pointer,
+.cursor-pointer:hover {
+    cursor: pointer;
+}
+
+
+.product-selection-container {
+    width: 100%;
+
+    .product-header {
+        background-color: #1f3933;
+        padding: 20px;
+
+        .product-image {
+            border-radius: 50%;
+            width: 180px;
+            height: 180px;
+        }
+
+        .product-name {
+            font-size: 28px;
+            font-family: SoDoSans, Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-weight: 600;
+            color: #ffffff;
+            padding-top: 50px;
+        }
+    }
+
+    .product-main {
+        padding: 20px;
+
+        .product-main-content-pad {
+            padding: 0 15%;
+
+            .product-size-options-title {
+                font-size: 24px;
+                font-family: SoDoSans, Helvetica Neue, Helvetica, Arial, sans-serif;
+                font-weight: 600;
+                color: #000000;
+            }
+
+            .horizontal-separator {
+                background-color: #d4e9e2;
+                height: 4px;
+                border: 0;
+                border-radius: 2px;
+            }
+
+            .product-size-container {
+                padding: 20px 0;
+                display: flex;
+
+                .product-active {
+                    background-color: #d4e9e2;
+                    border: 2px solid #006241;
+                    border-radius: 50%;
+                    opacity: 1;
+                    z-index: -1;
+                    width: 60px;
+                    height: 60px;
+                    position: absolute;
+                    margin-left: 3px;
+
+                    &.size1-active {
+                        margin-left: 0px;
+                    }
+
+                    &.size2-active {
+                        margin-left: 77px;
+                    }
+
+                    &.size3-active {
+                        margin-left: 152px;
+                    }
+
+                    &.size4-active {
+                        margin-left: 228px;
+                    }
+                }
+
+                .product-size {
+                    width: 65px;
+                    text-align: center;
+                    margin-right: 10px;                    
+
+                    .size {
+                        background-repeat: no-repeat;
+                        height: 60px;
+                        width: 24px;
+                        background-size: contain;
+                        background-position: 50%;
+                        display: inline-block;
+
+                        &.size-1 {
+                            background-image: url('https://www.starbucks.com/app-assets/76b8892b0db8f5d411988fe1bbbe4141.svg');
+
+                            &.active {
+                                background-image: url('https://www.starbucks.com/app-assets/c6d5ff0dfccfc8966d3ad8ab2331921f.svg');
+                            }
+                        }
+
+                        &.size-2 {
+                            background-image: url('https://www.starbucks.com/app-assets/2920fb2a8c34d3ddb95ad262872526e9.svg');
+
+                            &.active {
+                                background-image: url('https://www.starbucks.com/app-assets/2362af789511c4dbe2446445dcc324f8.svg');
+                            }
+                        }
+
+                        &.size-3 {
+                            background-image: url('https://www.starbucks.com/app-assets/55e7819f7cf8e1959ec35e680d46d9a9.svg');
+
+                            &.active {
+                                background-image: url('https://www.starbucks.com/app-assets/04342268ae304f7757dddb04a8e43b74.svg');
+                            }
+                        }
+
+                        &.size-4 {
+                            background-image: url('https://www.starbucks.com/app-assets/3abf3fc78365ef0b59bbfd0ecd1c8490.svg');
+
+                            &.active {
+                                background-image: url('https://www.starbucks.com/app-assets/35ede7fba1a65e6f50ee927c5ecd6024.svg');
+                            }
+                        }
+                    }
+
+                    .size-title {
+                        font-family: SoDoSans, Helvetica Neue, Helvetica, Arial, sans-serif;
+                        font-weight: 600;
+                        font-size: 16px;
+                    }
+
+                    .size-quantity {
+                        font-family: SoDoSans, Helvetica Neue, Helvetica, Arial, sans-serif;
+                        font-size: 14px;
+                    }
+                }
+            }
+
+            .product-customization-container {
+                padding: 20px 0;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        .product-main-content-pad:not(:first-child) {
+            padding-right: 15%;
+        }
+    }
+}
+
+.product-customization-option {
+    width: 100%;
+    padding: 6px 16px;
+    margin: 15px 0;
+    border-radius: 8px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
+    font-family: SoDoSans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 19px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    user-select: none;
+
+    >div {
+        padding-top: 6px;
+        padding-bottom: 6px;
+
+        &.controls {
+            display: flex;
+            font-size: 26px;
+            padding: 2px 0 0 0;
+
+            .quantity {
+                padding: 0 10px;
+                font-size: 24px;
+            }
+        }
+    }
+}
+
+.product-option-selection-container {
+    .overlay {
+        background-color: rgba(0, 0, 0, 0.38);
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+    }
+
+    .product-option-selection-content {
+        top: 0;
+        left: 40vw;
+        right: 0;
+        bottom: 0;
+        overflow-y: auto;
+        position: fixed;
+        box-shadow: inset 1px 0 2px rgba(0, 0, 0, .2);
+        background-color: #ffffff;
+        padding: 20px 40px;
+
+        .product-option-header {
+            text-align: right;
+
+            .option-close:after {
+                display: inline-block;
+                content: "\00d7";
+                font-size: 35px;
+                opacity: 0.75;
+            }
+        }
+
+        .product-option-body {
+            display: flex;
+            justify-content: center;
+
+            .product-option-body-content {
+                width: 60%;
+
+                h2 {
+                    font-family: SoDoSans, Helvetica Neue, Helvetica, Arial, sans-serif;
+                    font-size: 24px;
+                    font-weight: 600;
+                    margin-bottom: 50px;
+                }
+            }
+        }
+    }
+}
