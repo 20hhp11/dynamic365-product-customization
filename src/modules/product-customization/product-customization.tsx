@@ -18,8 +18,31 @@ export interface IProductCustomizationViewProps extends IProductCustomizationPro
 
 export interface IProductCustomizationState {
     showEditOptions: boolean;
+    selectedProductSizeNo: number;
+    selectedProductForEdit: IProduct | null;
+}
+
+export interface ISizeOption {
+    title: string;
+    description: string;
+}
+
+export interface IProduct {
+    id: number;
+    name: string;
+    customizationOptions: ICustomizationOption[];
+}
+
+export interface ICustomizationOption {
+    id: number;
+    category: string;
+    customizationItems: ICustomizationItem[];
+}
+
+export interface ICustomizationItem {
+    id: number;
+    name: string;
     quantity: number;
-    activeProductSizeNo: number;
 }
 
 /**
@@ -28,12 +51,139 @@ export interface IProductCustomizationState {
  * @extends {React.PureComponent<IProductCustomizationProps<IProductCustomizationData>>}
  */
 class ProductCustomization extends React.PureComponent<IProductCustomizationProps<IProductCustomizationData>, IProductCustomizationState> {
+    private readonly sizeOptions: ISizeOption[] = [
+        {
+            title: 'Tall',
+            description: '12 fl oz'
+        },
+        {
+            title: 'Grande',
+            description: '16 fl oz'
+        },
+        {
+            title: 'Venti',
+            description: '24 fl oz'
+        },
+        {
+            title: 'Trenta',
+            description: '30 fl oz'
+        }
+    ];
+
+    private readonly products: IProduct[] = [
+        {
+            id: 1,
+            name: 'Vanilla Syrup',
+            customizationOptions: [
+                {
+                    id: 1,
+                    category: 'SYRUPS',
+                    customizationItems: [
+                        {
+                            id: 1,
+                            name: 'Add Brown Sugar Syrup',
+                            quantity: 0
+                        },
+                        {
+                            id: 2,
+                            name: 'Add Caramel Syrup',
+                            quantity: 0
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    category: 'SAUCES',
+                    customizationItems: [
+                        {
+                            id: 1,
+                            name: 'Add Mocha Sauce',
+                            quantity: 0
+                        },
+                        {
+                            id: 2,
+                            name: 'Add New Dark Caramel Sauce',
+                            quantity: 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 2,
+            name: 'Toppings',
+            customizationOptions: [
+                {
+                    id: 3,
+                    category: 'TOPPING OPTIONS',
+                    customizationItems: [
+                        {
+                            id: 1,
+                            name: 'Cookie Crumble Topping',
+                            quantity: 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 3,
+            name: 'Tea',
+            customizationOptions: [
+                {
+                    id: 4,
+                    category: 'Tea',
+                    customizationItems: [
+                        {
+                            id: 1,
+                            name: 'Add Chai',
+                            quantity: 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 4,
+            name: 'Ice',
+            customizationOptions: [
+                {
+                    id: 5,
+                    category: 'POWDERS',
+                    customizationItems: [
+                        {
+                            id: 1,
+                            name: 'Chocolate Malt Powder',
+                            quantity: 0
+                        },
+                        {
+                            id: 2,
+                            name: 'Add Vanilla Bean Powder',
+                            quantity: 0
+                        }
+                    ]
+                },
+                {
+                    id: 6,
+                    category: 'CREAMER',
+                    customizationItems: [
+                        {
+                            id: 1,
+                            name: 'Splash of 2% Milk',
+                            quantity: 0
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
+
     public constructor(props: IProductCustomizationProps<IProductCustomizationData>, state: IProductCustomizationState) {
         super(props);
         this.state = {
             showEditOptions: false,
-            quantity: 1,
-            activeProductSizeNo: 1
+            selectedProductSizeNo: 1,
+            selectedProductForEdit: null
         };
     }
 
@@ -53,141 +203,128 @@ class ProductCustomization extends React.PureComponent<IProductCustomizationProp
     }
 
     public renderSizeOption = () => {
-        const activeProductSizeNo = this.state.activeProductSizeNo;
-        const activeProductClass = `size${activeProductSizeNo}-active`;
+        const selectedProductSizeNo = this.state.selectedProductSizeNo;
+        const activeProductClass = `size${selectedProductSizeNo}-active`;
+        const options = this.sizeOptions.map((option, index) => {
+            return (
+                <div key={index} onClick={() => this.selectSize(index + 1)} className='product-size cursor-pointer'>
+                    <div className={`size size-${index + 1} ${selectedProductSizeNo === index + 1 ? 'active' : ''}`}></div>
+                    <div className='size-title'>{option.title}</div>
+                    <div className='size-quantity'>{option.description}</div>
+                </div>
+            );
+        });
+
         return (
             <div className='product-size-container'>
                 <div className={`product-active ${activeProductClass}`}></div>
-                <div onClick={() => this.selectSize(1)} className='product-size cursor-pointer'>
-                    <div className={`size size-1 ${activeProductSizeNo === 1 ? 'active' : ''}`}></div>
-                    <div className='size-title'>Tall</div>
-                    <div className='size-quantity'>12 fl oz</div>
-                </div>
-                <div onClick={() => this.selectSize(2)} className='product-size cursor-pointer'>
-                    <div className={`size size-2 ${activeProductSizeNo === 2 ? 'active' : ''}`}></div>
-                    <div className='size-title'>Grande</div>
-                    <div className='size-quantity'>16 fl oz</div>
-                </div>
-                <div onClick={() => this.selectSize(3)} className='product-size cursor-pointer'>
-                    <div className={`size size-3 ${activeProductSizeNo === 3 ? 'active' : ''}`}></div>
-                    <div className='size-title'>Venti</div>
-                    <div className='size-quantity'>24 fl oz</div>
-                </div>
-                <div onClick={() => this.selectSize(4)} className='product-size cursor-pointer'>
-                    <div className={`size size-4 ${activeProductSizeNo === 4 ? 'active' : ''}`}></div>
-                    <div className='size-title'>Trenta</div>
-                    <div className='size-quantity'>30 fl oz</div>
-                </div>
+                {options}
             </div>
         );
     };
 
-    public toggleEditOptions = () => {
+    public toggleEditOptions = (product: IProduct | null) => {
         this.setState({
-            showEditOptions: !this.state.showEditOptions
+            showEditOptions: !this.state.showEditOptions,
+            selectedProductForEdit: product
         });
     };
 
-    public addQuantity = () => {
-        const qty = this.state.quantity;
+    public addQuantity = (optionId: number, itemId: number) => {
+        let product: IProduct = { ...this.state.selectedProductForEdit } as IProduct;
+        product?.customizationOptions.forEach(option => {
+            if (option.id === optionId) {
+                option.customizationItems.forEach(item => {
+                    if (item.id === itemId) {
+                        item.quantity = item.quantity + 1;
+                    }
+                });
+            }
+        });
         this.setState({
-            quantity: qty + 1
+            selectedProductForEdit: product
         });
     };
 
-    public removeQuantity = () => {
-        const qty = this.state.quantity;
-        if (qty > 1) {
-            this.setState({
-                quantity: qty - 1
-            });
-        }
+    public removeQuantity = (optionId: number, itemId: number) => {
+        let product: IProduct = { ...this.state.selectedProductForEdit } as IProduct;
+        product?.customizationOptions.forEach(option => {
+            if (option.id === optionId) {
+                option.customizationItems.forEach(item => {
+                    if (item.id === itemId) {
+                        if (item.quantity > 1) {
+                            item.quantity = item.quantity - 1;
+                        }
+                    }
+                });
+            }
+        });
+        this.setState({
+            selectedProductForEdit: product
+        });
     };
 
     public selectSize = (no: number) => {
         this.setState({
-            activeProductSizeNo: no
+            selectedProductSizeNo: no
         });
     };
 
     private renderOption = () => {
+        return this.products.map(product => {
+            return (
+                <div key={product.id} className='product-customization-option'>
+                    <div>{product.name}</div>
+                    <div onClick={() => this.toggleEditOptions(product)} className='option-edit-btn cursor-pointer'>
+                        Edit
+                    </div>
+                </div>
+            );
+        });
+    };
+
+    private readonly renderEditOption = () => {
+        const product = this.state.selectedProductForEdit;
+
+        if (!product || !this.state.showEditOptions) {
+            return null;
+        }
+
+        const productCustomizationOptions = product?.customizationOptions.map(option => {
+            return option.customizationItems.map(item => {
+                return (
+                    <div key={`${option.id}#${item.id}`} className='product-customization-option'>
+                        <div>{item.name}</div>
+                        <div className='controls'>
+                            <div onClick={() => this.removeQuantity(option.id, item.id)} className='cursor-pointer'>
+                                -
+                            </div>
+                            <div className='quantity'>{item.quantity}</div>
+                            <div onClick={() => this.addQuantity(option.id, item.id)} className='cursor-pointer'>
+                                +
+                            </div>
+                        </div>
+                    </div>
+                );
+            });
+        });
+
         return (
-            <div>
-                <div className='product-customization-option'>
-                    <div>Vanilla Syrup</div>
-                    <div onClick={this.toggleEditOptions} className='option-edit-btn cursor-pointer'>
-                        Edit
+            <div className='product-option-selection-container'>
+                <div className='overlay'></div>
+                <div className='product-option-selection-content'>
+                    <div className='product-option-header'>
+                        <span onClick={() => this.toggleEditOptions(null)} className='option-close cursor-pointer'></span>
                     </div>
-                </div>
-                <div className='product-customization-option'>
-                    <div>Toppings</div>
-                    <div onClick={this.toggleEditOptions} className='option-edit-btn cursor-pointer'>
-                        Edit
-                    </div>
-                </div>
-                <div className='product-customization-option'>
-                    <div>Preparation Method</div>
-                    <div onClick={this.toggleEditOptions} className='option-edit-btn cursor-pointer'>
-                        Edit
-                    </div>
-                </div>
-                <div className='product-customization-option'>
-                    <div>Tea</div>
-                    <div onClick={this.toggleEditOptions} className='option-edit-btn cursor-pointer'>
-                        Edit
+                    <div className='product-option-body'>
+                        <div className='product-option-body-content'>
+                            <h2>{product?.name}</h2>
+                            {productCustomizationOptions}
+                        </div>
                     </div>
                 </div>
             </div>
         );
-    };
-
-    private readonly renderEditOption = () => {
-        if (this.state.showEditOptions) {
-            return (
-                <div className='product-option-selection-container'>
-                    <div className='overlay'></div>
-                    <div className='product-option-selection-content'>
-                        <div className='product-option-header'>
-                            <span onClick={this.toggleEditOptions} className='option-close cursor-pointer'></span>
-                        </div>
-                        <div className='product-option-body'>
-                            <div className='product-option-body-content'>
-                                <h2>Falvours</h2>
-                                <div className='product-customization-option'>
-                                    <div>Add Brown Sugar Syrup</div>
-                                    <div className='controls'>
-                                        <div onClick={this.removeQuantity} className='cursor-pointer'>
-                                            -
-                                        </div>
-                                        <div className='quantity'>{this.state.quantity}</div>
-                                        <div onClick={this.addQuantity} className='cursor-pointer'>
-                                            +
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='product-customization-option'>
-                                    <div>Add Caramel Syrup</div>
-                                    <div className='controls'>
-                                        <div className='cursor-pointer'>-</div>
-                                        <div className='quantity'>1</div>
-                                        <div className='cursor-pointer'>+</div>
-                                    </div>
-                                </div>
-                                <div className='product-customization-option'>
-                                    <div>Add Cinnamon Dolce Syrup</div>
-                                    <div className='controls'>
-                                        <div className='cursor-pointer'>-</div>
-                                        <div className='quantity'>1</div>
-                                        <div className='cursor-pointer'>+</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-        return null;
     };
 }
 
